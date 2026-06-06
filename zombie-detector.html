@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Zombie Detector Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #07110a;
+      color: #d7ffd7;
+    }
+
+    header {
+      background: #0b2b12;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 3px solid #39ff14;
+    }
+
+    h1 {
+      margin: 0;
+      color: #39ff14;
+      text-shadow: 0 0 10px #39ff14;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 25px;
+    }
+
+    .card {
+      background: #102015;
+      border: 2px solid #1f7a2e;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 12px #0f3;
+    }
+
+    .label {
+      font-size: 14px;
+      color: #9cff9c;
+    }
+
+    .value {
+      font-size: 32px;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .safe { color: #39ff14; }
+    .warning { color: #ffd700; }
+    .danger { color: #ff3333; }
+
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 15px 25px;
+      font-size: 18px;
+      background: #39ff14;
+      color: #061006;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #8cff7a;
+    }
+
+    .radar {
+      width: 180px;
+      height: 180px;
+      border: 3px solid #39ff14;
+      border-radius: 50%;
+      margin: 10px auto;
+      position: relative;
+      background: radial-gradient(circle, #123d1b, #061006);
+      overflow: hidden;
+    }
+
+    .sweep {
+      width: 90px;
+      height: 90px;
+      background: rgba(57, 255, 20, 0.35);
+      position: absolute;
+      left: 90px;
+      top: 0;
+      transform-origin: bottom left;
+      animation: spin 2s linear infinite;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      background: red;
+      border-radius: 50%;
+      position: absolute;
+      box-shadow: 0 0 10px red;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      color: #7cff7c;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🧟 Zombie Detector Dashboard</h1>
+    <p>Emergency Bio-Scanner System</p>
+  </header>
+
+  <div class="dashboard">
+    <div class="card">
+      <div class="label">Zombie Threat Level</div>
+      <div id="threatLevel" class="value safe">LOW</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Detected Zombies</div>
+      <div id="zombieCount" class="value">0</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Safe Zone Distance</div>
+      <div id="safeDistance" class="value">5.2 mi</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Scanner Status</div>
+      <div id="scannerStatus" class="value safe">ACTIVE</div>
+    </div>
+  </div>
+
+  <div class="card" style="max-width: 400px; margin: auto;">
+    <div class="label">Radar Scanner</div>
+    <div class="radar" id="radar">
+      <div class="sweep"></div>
+    </div>
+  </div>
+
+  <button onclick="scanArea()">Scan Area</button>
+
+  <footer>
+    Zombie Detection Network | Sector 7 Survival Command
+  </footer>
+
+  <script>
+    function scanArea() {
+      const zombieCount = Math.floor(Math.random() * 30);
+      const safeDistance = (Math.random() * 10).toFixed(1);
+
+      const threatLevel = document.getElementById("threatLevel");
+      const zombieCountBox = document.getElementById("zombieCount");
+      const safeDistanceBox = document.getElementById("safeDistance");
+      const scannerStatus = document.getElementById("scannerStatus");
+      const radar = document.getElementById("radar");
+
+      zombieCountBox.textContent = zombieCount;
+      safeDistanceBox.textContent = safeDistance + " mi";
+      scannerStatus.textContent = "SCANNING...";
+
+      radar.querySelectorAll(".dot").forEach(dot => dot.remove());
+
+      for (let i = 0; i < zombieCount; i++) {
+        const dot = document.createElement("div");
+        dot.className = "dot";
+        dot.style.left = Math.random() * 160 + "px";
+        dot.style.top = Math.random() * 160 + "px";
+        radar.appendChild(dot);
+      }
+
+      if (zombieCount < 8) {
+        threatLevel.textContent = "LOW";
+        threatLevel.className = "value safe";
+      } else if (zombieCount < 18) {
+        threatLevel.textContent = "MEDIUM";
+        threatLevel.className = "value warning";
+      } else {
+        threatLevel.textContent = "HIGH";
+        threatLevel.className = "value danger";
+      }
+
+      setTimeout(() => {
+        scannerStatus.textContent = "ACTIVE";
+      }, 800);
+    }
+  </script>
+
+</body>
+</html>
